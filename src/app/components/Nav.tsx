@@ -37,7 +37,7 @@ export default function Nav({categories, user, logout}: {categories: Array<any>,
                         <div className='flex w-full mt-5'>
                             {
                                 user ? 
-                                <form action={logout} className='w-full'>
+                                <form action={logout} method="POST" className='w-full'>
                                     <button type='submit' className='bg-tertiary w-full p-2 rounded-md hover:bg-highlight'>Log out</button>
                                 </form>
                                 :

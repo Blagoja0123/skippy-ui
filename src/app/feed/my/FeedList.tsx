@@ -2,6 +2,7 @@ import NewsCard from "@/app/components/NewsCard";
 import PaginationControl from "@/app/components/PaginationControl";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { getSession } from "@/lib/auth";
+import { shuffleArray } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -27,15 +28,24 @@ export default async function FeedList({searchParams}: {
     searchParams?: { per_page?: string; page?: string;};
   })
     {
+
+
     const page = searchParams?.page ?? '1';
     const per_page = searchParams?.per_page ?? '15';
 
     const articles = await getFeed();
     const start = (Number(page) - 1) * Number(per_page)
     const end = start + Number(per_page);
-
+    if(!articles.data){
+        return (
+            <div className="flex h-[90vh] flex-col items-center justify-center gap-10">
+                <h1 className="text-6xl font-bold">No liked categories found</h1>
+                <h3 className="text-3xl font-semibold">Add categories to favorites and try again</h3>
+            </div>
+        )
+    }
     const entries = articles.data.slice(start, end);
-    // shuffleArray(entries);
+    shuffleArray(entries);
 
     const formatDay = (day: number) => {
         if (day === 1) return "1st";

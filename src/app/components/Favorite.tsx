@@ -17,7 +17,6 @@ const Favorite = ({ user, category_id, session, revalidate }: { user: any; categ
 
     useEffect(() => {
         const favoriteElement = document.querySelector('#favorite');
-        setLiked(favoriteElement?.classList.contains('text-tertiary'));
         if (likedCats.includes(category_id)) {
             setLiked(true);
             favoriteElement?.classList.add('text-tertiary', 'hover:text-white');
@@ -27,7 +26,7 @@ const Favorite = ({ user, category_id, session, revalidate }: { user: any; categ
             favoriteElement?.classList.add('text-white', 'hover:text-tertiary');
             favoriteElement?.classList.remove('text-tertiary', 'hover:text-white');
         }
-    }, [category_id]);
+    }, [likedCats, category_id]);
 
     const handleFavorite = () => {
         if(user === null){
@@ -35,9 +34,16 @@ const Favorite = ({ user, category_id, session, revalidate }: { user: any; categ
                 className: "bg-foreground-dark",
                 description: "Cannot like or dislike when not logged in",
                 action: {
+                    label: "Log in",
+                    onClick: () => {router.push('/login')},
+                },
+                cancel: {
                     label: "OK",
                     onClick: () => {return},
-                }
+                },
+                cancelButtonStyle: {
+                    color: "bg-tertiary",
+                },
             })
             // return;
         }

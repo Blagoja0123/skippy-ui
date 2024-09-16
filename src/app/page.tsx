@@ -2,7 +2,12 @@
 import Head from 'next/head';
 import Scroller from './components/Scroller';
 import DefaultLayout from './layouts/DefaultLayout';
-import { redirect } from 'next/navigation';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "SKIPPY",
+  description: "The homepage for all your news"
+}
 
 export default function Home() {
   

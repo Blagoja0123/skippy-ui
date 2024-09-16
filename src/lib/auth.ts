@@ -2,12 +2,14 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 
 const secretKey = "secret";
 const key = new TextEncoder().encode(secretKey);
 
 // Function to call an external API for login and get a JWT token
 export async function login(formData: FormData) {
+  "use server";
   const response = await fetch("http://localhost:8000/auth/login", {
     method: "POST",
     headers: {
@@ -64,4 +66,17 @@ export async function getSession() {
     console.error("Invalid session", error);
     redirect('/login');
   }
+}
+
+export async function logout(){
+  "use server";
+  cookies().set("session", "", { expires: new Date(0) });
+}
+
+export async function validateSession(req: NextRequest){
+  const session = req.cookies.get("session")?.value;
+
+  if (!session) return false;
+
+  return true;
 }

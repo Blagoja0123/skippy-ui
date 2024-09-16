@@ -5,6 +5,11 @@ import { Suspense } from "react";
 import FeedList from "./FeedList";
 import DefaultLayout from "@/app/layouts/DefaultLayout";
 import { cookies } from "next/headers";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "SKIPPY | Your Feed"
+}
 
 const page = ({searchParams}: { searchParams?: { per_page?: string; page?: string;};}) => {
     

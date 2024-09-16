@@ -1,13 +1,24 @@
 "use server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function Logout() {
-    cookies().set("session", "", { httpOnly: true, path: "/", maxAge: 0 });
-    redirect('/feed/home');
-}
+    try {
+        cookies().set("session", "", { httpOnly: true, path: "/", maxAge: 0 });
+        cookies().delete({name: "session"});
+        console.log('deleted cookies');
 
+        revalidateTag("user");
+        revalidatePath('/');
+        revalidatePath('/articles/[category]', 'page');
+        revalidatePath('/feed/home');
+
+    } catch (error) {
+        console.error('Error during logout:', error);
+    }
+}
+export default Logout;
 export async function Revalidate(){
     revalidateTag('user');
 }

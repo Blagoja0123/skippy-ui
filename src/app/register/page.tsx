@@ -4,6 +4,7 @@ import { login } from '@/lib/auth'
 import { getFile, uploadFile } from "@/lib/storage";
 import { redirect } from "next/navigation"
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 const Register = () => {
 
   const [categories, setCategories] = useState([]);
@@ -46,13 +47,24 @@ const Register = () => {
     const filename = await handleUpload();
     const url = await getFile(filename!);
     setFormattedData({username: formData.get('username'), password: formData.get('password'), image_url: url!, liked_categories: selectedCategories, });
-    fetch("http://localhost:8000/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formattedData),
-    });
+    try {
+      fetch("http://localhost:8000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formattedData),
+      });
+    } catch (error) {
+        return toast("Error", {
+          className: "bg-foreground-dark",
+          description: "Something went wrong while registering",
+          action: {
+              label: "OK",
+              onClick: () => {return},
+          }
+      })
+    }
   }
 
   return (
